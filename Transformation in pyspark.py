@@ -169,3 +169,73 @@ df.display(df3)
 # MAGIC select * from samples.bakehouse.sales_franchises
 # MAGIC union all
 # MAGIC select * from samples.bakehouse.sales_franchises
+
+# COMMAND ----------
+
+# DBTITLE 1,orderBy  ASC pyspark
+from pyspark.sql.functions import desc,col
+
+new_df=df.orderBy(col("country"))
+display(new_df)
+
+
+# COMMAND ----------
+
+# DBTITLE 1,orderBy desc
+from pyspark.sql.functions import desc,col
+
+new_df=df.orderBy(col("country").desc())
+display(new_df)
+
+
+# COMMAND ----------
+
+# DBTITLE 1,orderBy SQL
+# MAGIC %sql
+# MAGIC select * from samples.bakehouse.sales_franchises order by country
+
+# COMMAND ----------
+
+# DBTITLE 1,limit pyspark
+new_df=df.limit(2)
+display(new_df)
+
+# COMMAND ----------
+
+# DBTITLE 1,limit SQL
+# MAGIC %sql
+# MAGIC select * from samples.bakehouse.sales_transactions limit 10
+
+# COMMAND ----------
+
+# DBTITLE 1,Repartition (shfuling) INC or DESC no. of partition
+new_df=df.repartition(3)
+display(df)
+
+# COMMAND ----------
+
+# DBTITLE 1,Coalesce (no shfuling) DESC no. of partition
+new_df=df.coalesce(3)
+display(df)
+
+# COMMAND ----------
+
+# DBTITLE 1,collect
+df.collect()
+
+# COMMAND ----------
+
+# DBTITLE 1,createOrReplaceTempView -- pyspark to SQL
+df.limit(5).createOrReplaceTempView("viewforsql")
+
+# COMMAND ----------
+
+# DBTITLE 1,view for sql
+# MAGIC %sql
+# MAGIC select * from viewforsql
+
+# COMMAND ----------
+
+# DBTITLE 1,SQL to dataframe
+new_df=spark.sql("select * from viewforsql limit 3")
+display(new_df)
